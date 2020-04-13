@@ -1,4 +1,4 @@
-
+from random import randint
 
 # ------------------------------
 # functions
@@ -35,9 +35,9 @@ Handles inputs.
     :return: return handled input
     """
     while True:
-        raw = int(input('> '))
+        raw = input('> ')
         if raw in valid_inputs:
-            return raw
+            return int(raw)
         else:
             print('Invalid input.')
 
@@ -63,13 +63,22 @@ actions takes 2 turns.
         print('B turn. Choose your actions.')
         if b_act2 == 1:
             a = 5
-            b = inputs()
-        else:
-            a = inputs()
-            if a == 1:
-                b = 5
+            if bot:
+            	b = randint(1, 4)
             else:
-                b = inputs()
+            	b = inputs()
+        else:
+        	if bot:
+        		a = randint(1, 4)
+        	else:
+        		a = inputs()
+        	if a == 1:
+        		b = 5
+        	else:
+        		if bot:
+        			b = randint(1, 4)
+        		else:
+        			b = inputs()
     return a, b
 
 
@@ -214,6 +223,7 @@ inside the round loop.
         forward_collision = False
     if punch_collision or forward_collision:
         gap = True
+        
 
 # actions: 1: punch, 2:up or down, 3: forward, 4: back, 5: punch return
 
@@ -223,7 +233,7 @@ inside the round loop.
 
 jump_message = {True: 'Jump!', False: ''}
 actions = {1: 'Punch', 2: 'Stand up or down', 3: 'Step forward', 4: 'Step back', 5: 'Punch recovery'}
-valid_inputs = {1, 2, 3, 4, 5}
+valid_inputs = {'1', '2', '3', '4'}
 a_figure = {True: 'A', False: 'a'}
 b_figure = {True: 'B', False: 'b'}
 punch_figure = {
@@ -260,6 +270,11 @@ a_stomps_b = False
 b_stomps_a = False
 turn_count = 0
 message = ''
+if input('Bot?') == 'yes':
+	bot = True
+else:
+	bot = False
+
 
 # -----------------------------------------------------
 # game loop
@@ -301,3 +316,9 @@ while life_a > 0 and life_b > 0:
     a_stomps_b = False
     b_stomps_a = False
     turn_count += 1
+    if bot:
+    	pass
+    else:
+    	print('\n' * 2000)
+
+draw_screen()
