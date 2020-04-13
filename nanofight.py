@@ -1,5 +1,6 @@
 from random import randint
 
+
 # ------------------------------
 # functions
 def draw_screen():
@@ -11,12 +12,13 @@ Graphical part of the game.
     else:
         jump = False
     if gap:
-        print(f'''Valid actions: 1-punch, 2-stand-up or stand-down, 3-step forward and 4-step back.
-    
+        print(f'''\n\n\nValid actions: 1-punch, 2-stand-up or stand-down, 3-step forward and 4-step back.
+
      Turn:{turn_count}    _____D_O_J_O______     A move: {actions.get(a_act, '')}
      A:{life_a}      |                  |    B move: {actions.get(b_act, '')}
-     B:{life_b}      |     ''' + a_figure[a_stand] + punch_figure[(a_pu, a_stand)] + gap_figure[gap] + punch_figure[(b_pu, b_stand)] + b_figure[
-            b_stand] + f'''     |    {jump_message[jump]}
+     B:{life_b}      |     ''' + a_figure[a_stand] + punch_figure[(a_pu, a_stand)] + gap_figure[gap] + punch_figure[
+            (b_pu, b_stand)] + b_figure[
+                  b_stand] + f'''     |    {jump_message[jump]}
               ^^^^^^^^^^^^^^^^^^^^''')
     else:
         print(f'''Valid actions: 1-punch, 2-stand-up or stand-down, 3-step forward and 4-step back.
@@ -64,21 +66,21 @@ actions takes 2 turns.
         if b_act2 == 1:
             a = 5
             if bot:
-            	b = randint(1, 4)
+                b = randint(1, 4)
             else:
-            	b = inputs()
+                b = inputs()
         else:
-        	if bot:
-        		a = randint(1, 4)
-        	else:
-        		a = inputs()
-        	if a == 1:
-        		b = 5
-        	else:
-        		if bot:
-        			b = randint(1, 4)
-        		else:
-        			b = inputs()
+            if bot:
+                a = randint(1, 4)
+            else:
+                a = inputs()
+            if a == 1:
+                b = 5
+            else:
+                if bot:
+                    b = randint(1, 4)
+                else:
+                    b = inputs()
     return a, b
 
 
@@ -223,7 +225,7 @@ inside the round loop.
         forward_collision = False
     if punch_collision or forward_collision:
         gap = True
-        
+
 
 # actions: 1: punch, 2:up or down, 3: forward, 4: back, 5: punch return
 
@@ -270,17 +272,62 @@ a_stomps_b = False
 b_stomps_a = False
 turn_count = 0
 message = ''
-if input('Bot?') == 'yes':
-	bot = True
-else:
-	bot = False
 
+# game intro
+print('''
+======================================================
+==================§§ NANO FIGHT §§====================
+======================================================
+
+    Welcome to Nano Fight! This is a very tiny, turn
+based, brawler game.
+
+    In your turn, you'll be asked to choose two actions
+for your fighter's next two moves. There are four
+possible actions, which are PUNCH, STAND UP/DOWN (down
+if you're up and up if you're down), STEP FORWARD and
+STEP BACK.
+
+    There is no problem if you choose the same action
+twice in a row, but keep in mind that whenever you
+choose PUNCH, you'll automatically loose your next
+action, as an additional cost to the punch action, which
+can leave you vulnerable. So use it wisely.
+
+    There are two ways to hurt your opponent: through
+hitting him with a PUNCH, obviously, and through STOMPS.
+To stomp your enemy, you'll have to STEP FORWARD onto him
+while he is already besides you (near) and while you're
+standing up and he is crouching. But be aware that if he
+punches you at the same time, the punch is gonna prevail
+and it's gonna be you who'll get hurt.
+
+    You should also know that there are two ways to avoid
+getting punched other than keeping a distance between
+you and the opponent: being crouched while he, standing
+up, tries to hit you and, the other way, getting up
+(STAND UP action) in the exact same moment that your
+opponent, while crouched, tries to punch you. This happens
+because it's like you performed a small hop when getting
+up and dodged, this way, the attack coming from bellow.
+
+    Obs.: When playing against the BOT, just know that it
+chooses its actions purely at random... So it's much more
+fun to play with a friend.
+
+    Enjoy! 
+''')
+if input('Type "yes" to play against BOT > ') == 'yes':
+    bot = True
+else:
+    bot = False
 
 # -----------------------------------------------------
 # game loop
 while life_a > 0 and life_b > 0:
 
     draw_screen()
+    message = ''
 
     if turn_a:
         a_act1, a_act2 = action_definer()
@@ -308,6 +355,9 @@ while life_a > 0 and life_b > 0:
     score()
     replace()
 
+    if not gap and (a_act == 1 or b_act == 1) and (a_jump or b_jump):
+        message = 'Missed punch!'
+
     turn_a = not turn_a
     a_jump = False
     b_jump = False
@@ -317,8 +367,8 @@ while life_a > 0 and life_b > 0:
     b_stomps_a = False
     turn_count += 1
     if bot:
-    	pass
+        pass
     else:
-    	print('\n' * 2000)
+        print('\n' * 2000)
 
 draw_screen()
